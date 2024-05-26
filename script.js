@@ -25,6 +25,18 @@ for (let i = 0; i < 10; i++) {
   asteroids.push(asteroid);
 }
 
+let score = 0;
+
+// Create score display
+const scoreElement = document.createElement('div');
+scoreElement.style.position = 'absolute';
+scoreElement.style.top = '10px';
+scoreElement.style.left = '10px';
+scoreElement.style.color = 'white';
+scoreElement.style.fontFamily = 'Arial, sans-serif';
+scoreElement.style.fontSize = '24px';
+document.body.appendChild(scoreElement);
+
 // Handle window resize
 window.addEventListener('resize', function () {
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -59,6 +71,9 @@ document.addEventListener('touchmove', function (event) {
 function animate() {
   requestAnimationFrame(animate);
 
+  // Update score
+  scoreElement.textContent = 'Score: ' + score;
+
   // Move asteroids
   asteroids.forEach(asteroid => {
     asteroid.position.z += 0.05;
@@ -70,11 +85,16 @@ function animate() {
     // Check for collision
     const distance = spaceship.position.distanceTo(asteroid.position);
     if (distance < 1) {
-      alert('Game Over!');
-      window.location.reload(); // Reload the game
+      alert('Game Over! Your Score: ' + score);
+      resetGame();
     }
   });
 
   renderer.render(scene, camera);
 }
 animate();
+
+function resetGame() {
+  score = 0;
+  spaceship.position.set(0, 0, 0);
+}
